@@ -29,6 +29,7 @@ namespace ByteBank.Agencias
 
             actualizarCajasEdicion();
             actualizarControles();
+
         }
 
         private void actualizarCajasEdicion()
@@ -55,31 +56,29 @@ namespace ByteBank.Agencias
             btnOk.Click += okEventHandler;
             btnCancelar.Click += (RoutedEventHandler)cancelarEventHandler;
 
-            txtNumero.TextChanged += ValidaCampoNulo;
-            txtNombre.TextChanged += ValidaCampoNulo;
-            txtDireccion.TextChanged += ValidaCampoNulo;
-            txtDescripcion.TextChanged += ValidaCampoNulo;
-            txtTelefono.TextChanged += ValidaCampoNulo;
+            txtNumero.Validacion += ValidaCampoNulo;
+            txtNumero.Validacion += ValidaCampoNumero;
+            txtNombre.Validacion += ValidaCampoNulo;
+            txtDireccion.Validacion += ValidaCampoNulo;
+            txtDescripcion.Validacion += ValidaCampoNulo;
+            txtTelefono.Validacion += ValidaCampoNulo;
 
         }
 
-        private void ValidaCampoNulo(object sender, EventArgs e)
+        private bool ValidaCampoNulo(string texto)
         {
-            var txt = sender as TextBox;
-            var textoVacio = String.IsNullOrEmpty(txt.Text);
-
-            if (textoVacio)
-            {
-                txt.Background = new SolidColorBrush(Colors.OrangeRed);
-            }
-            else
-            {
-                txt.Background = new SolidColorBrush(Colors.White);
-            }
+            return !String.IsNullOrEmpty(texto);
         }
 
-       
-        private void cerrarVentana(object sender, EventArgs e)
+        private bool ValidaCampoNumero(string texto)
+        {
+           
+            return texto.All(Char.IsDigit);
+            
+        }
+
+
+            private void cerrarVentana(object sender, EventArgs e)
         {
             Close();
         }
