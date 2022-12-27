@@ -8,21 +8,48 @@ using System.Windows.Media;
 
 namespace ByteBank.Agencias
 {
-    public delegate bool ValidacionEventHandler(string texto);
+    public delegate void ValidacionEventHandler(object sender, ValidacionEventArgs e);
     public class ValidaTextBox : TextBox
     {
-        public event ValidacionEventHandler Validacion;
-
-        public ValidaTextBox()
+        private ValidacionEventHandler _validacion;
+        public event ValidacionEventHandler Validacion
         {
-            TextChanged += ValidaTextBox_TextChanged;
+            add
+            {
+                _validacion += value;
+                OnValidacion();
+            }
+
+            remove
+            {
+
+            }
         }
 
-        private void ValidaTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        protected override void OnTextChanged(TextChangedEventArgs e)
         {
-            if (Validacion != null)
+            base.OnTextChanged(e);
+            OnValidacion();
+        }
+
+
+        protected virtual void OnValidacion()
+        {
+            if (_validacion != null)
             {
-                var isValid = Validacion(Text);
+                var listaValidaciones = _validacion.GetInvocationList();
+                var e = new ValidacionEventArgs(Text);
+                var isValid = true;
+
+                foreach(ValidacionEventHandler validacion in listaValidaciones)
+                {
+                    validacion(this, e);
+                    if (!e.isValid)
+                    {
+                        isValid = false;
+                        break;
+                    }
+                }
 
                 Background = isValid
                     ? new SolidColorBrush(Colors.White)

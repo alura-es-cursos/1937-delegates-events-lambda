@@ -65,16 +65,17 @@ namespace ByteBank.Agencias
 
         }
 
-        private bool ValidaCampoNulo(string texto)
+        private void ValidaCampoNulo(object sender, ValidacionEventArgs e)
         {
-            return !String.IsNullOrEmpty(texto);
+            e.isValid = !String.IsNullOrEmpty(e.Texto);
+            return;
         }
 
-        private bool ValidaCampoNumero(string texto)
+        private void ValidaCampoNumero(object sender, ValidacionEventArgs e)
         {
            
-            return texto.All(Char.IsDigit);
-            
+            e.isValid = e.Texto.All(Char.IsDigit);
+            return;
         }
 
 
