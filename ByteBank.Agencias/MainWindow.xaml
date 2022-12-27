@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ByteBank.Agencias"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="400" Width="600">
     <Canvas Name="Container">
 
         <StackPanel Canvas.Top="15" Canvas.Left="290">
@@ -21,6 +21,7 @@
             <TextBlock Name="txtTelefono"></TextBlock>
         </StackPanel>
         <Button Name="btnBorrar" Content="Borrar registro" Canvas.Left="434" Canvas.Top="304" Click="Button_Click"/>
+        <Button Name="btnEditar" Content="Editar registro" Canvas.Left="350" Canvas.Top="304" />
     </Canvas>
 
 </Window>

@@ -22,11 +22,11 @@ namespace ByteBank.Agencias
     public partial class MainWindow : Window
     {
         private readonly ByteBankEntities _contextDB = new ByteBankEntities();
-        private readonly AgenciasListBox lstAgencias;
+        private readonly ListBox lstAgencias;
         public MainWindow()
         {
             InitializeComponent();
-            lstAgencias = new AgenciasListBox(this);
+            lstAgencias = new ListBox();
             actualizarControles();
         }
 
@@ -37,6 +37,9 @@ namespace ByteBank.Agencias
 
             Canvas.SetTop(lstAgencias, 20);
             Canvas.SetLeft(lstAgencias, 20);
+            lstAgencias.SelectionChanged += new SelectionChangedEventHandler(lstAgencias_SelectionChanged);
+
+            btnEditar.Click += new RoutedEventHandler(btnEditar_Click);
             Container.Children.Add(lstAgencias);
 
             lstAgencias.Items.Clear();
@@ -47,6 +50,33 @@ namespace ByteBank.Agencias
                 lstAgencias.Items.Add(agencia);
             }
             
+        }
+
+        private void lstAgencias_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var agenciaSeleccionada = (Agencia)lstAgencias.SelectedItem;
+
+            txtNumero.Text = agenciaSeleccionada.Numero;
+            txtNombre.Text = agenciaSeleccionada.Nombre;
+            txtDescripcion.Text = agenciaSeleccionada.Descripcion;
+            txtDireccion.Text = agenciaSeleccionada.Direccion;
+            txtTelefono.Text = agenciaSeleccionada.Telefono;
+        }
+
+        private void btnEditar_Click(object sender, RoutedEventArgs e)
+        {
+            var agenciaSeleccionada = (Agencia)lstAgencias.SelectedItem;
+            var ventanaEdicion = new EdicionRegistro(agenciaSeleccionada);
+
+            bool result = ventanaEdicion.ShowDialog().Value;
+
+            if (result)
+            {
+                //Ejecutamos cuando es true
+            } else
+            {
+                //Ejecutamos cuando es false
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
