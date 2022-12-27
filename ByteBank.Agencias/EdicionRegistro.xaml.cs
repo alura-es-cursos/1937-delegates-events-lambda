@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace ByteBank.Agencias
 {
@@ -41,29 +42,47 @@ namespace ByteBank.Agencias
 
         private void actualizarControles()
         {
-            var okEventHandler = (RoutedEventHandler)btnOk_Click + cerrarVentana;
+            RoutedEventHandler dialogResultTrue = (o, e) => DialogResult = true;
+            RoutedEventHandler dialogResultFalse = (o, e) => DialogResult = false;
+           
+
+            var okEventHandler = dialogResultTrue + cerrarVentana;
             Delegate cancelarEventHandler = 
-                   Delegate.Combine((RoutedEventHandler)btnCancelar_Click,
+                   Delegate.Combine(dialogResultFalse,
                                     (RoutedEventHandler)cerrarVentana);
                 
 
             btnOk.Click += okEventHandler;
             btnCancelar.Click += (RoutedEventHandler)cancelarEventHandler;
 
+            txtNumero.TextChanged += ValidaCampoNulo;
+            txtNombre.TextChanged += ValidaCampoNulo;
+            txtDireccion.TextChanged += ValidaCampoNulo;
+            txtDescripcion.TextChanged += ValidaCampoNulo;
+            txtTelefono.TextChanged += ValidaCampoNulo;
+
         }
 
-        private void btnOk_Click(object sender, RoutedEventArgs e)
+        private void ValidaCampoNulo(object sender, EventArgs e)
         {
-            DialogResult = true;
-        }
-        private void btnCancelar_Click(object sender, RoutedEventArgs e)
-        {
-            DialogResult = false;
+            var txt = sender as TextBox;
+            var textoVacio = String.IsNullOrEmpty(txt.Text);
+
+            if (textoVacio)
+            {
+                txt.Background = new SolidColorBrush(Colors.OrangeRed);
+            }
+            else
+            {
+                txt.Background = new SolidColorBrush(Colors.White);
+            }
         }
 
-        private void cerrarVentana(object sender, RoutedEventArgs e)
+       
+        private void cerrarVentana(object sender, EventArgs e)
         {
             Close();
         }
     }
 }
+
